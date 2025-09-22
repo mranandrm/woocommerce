@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woocommerce/screens/HomeScreen.dart';
 import 'package:woocommerce/screens/ProductScreen.dart';
 
 void main() {
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
 
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const ProductScreen(),
+      home: const HomeScreen(),
+
     );
   }
 }

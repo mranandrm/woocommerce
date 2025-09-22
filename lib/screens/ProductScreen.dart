@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../services/woocommerce_service.dart';
 
@@ -16,7 +18,13 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
+    // Run immediately once
     _loadProducts();
+
+    // Run every 5 seconds
+    Timer.periodic(Duration(seconds: 2), (timer) {
+      _loadProducts();
+    });
   }
 
   Future<void> _loadProducts() async {
