@@ -20,10 +20,18 @@ Widget build(BuildContext context) {
           ),
         ),
         ListTile(
+          leading: const Icon(Icons.home),
+          title: const Text("Home"),
+          onTap: () {
+            onItemSelected(0);
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
           leading: const Icon(Icons.category),
           title: const Text("Categories"),
           onTap: () {
-            onItemSelected(0);
+            onItemSelected(1);
             Navigator.pop(context);
           },
         ),
@@ -31,7 +39,7 @@ Widget build(BuildContext context) {
           leading: const Icon(Icons.store),
           title: const Text("Brands"),
           onTap: () {
-            onItemSelected(1);
+            onItemSelected(2);
             Navigator.pop(context);
           },
         ),
@@ -39,7 +47,7 @@ Widget build(BuildContext context) {
           leading: const Icon(Icons.shopping_bag),
           title: const Text("Products"),
           onTap: () {
-            onItemSelected(2);
+            onItemSelected(3);
             Navigator.pop(context);
           },
         ),
@@ -47,7 +55,7 @@ Widget build(BuildContext context) {
           leading: const Icon(Icons.person),
           title: const Text("Profile"),
           onTap: () {
-            onItemSelected(3);
+            onItemSelected(4);
             Navigator.pop(context);
           },
         ),
@@ -56,7 +64,7 @@ Widget build(BuildContext context) {
           leading: const Icon(Icons.logout),
           title: const Text("Logout"),
           onTap: () {
-            onItemSelected(4);
+            onItemSelected(5);
             Navigator.pop(context);
           },
         ),

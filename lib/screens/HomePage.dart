@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void _onDrawerItemSelected(int index) async {
-    if (index == 4) {
+    if (index == 5) {
       // Logout selected
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
