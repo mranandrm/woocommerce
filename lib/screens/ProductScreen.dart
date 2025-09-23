@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../services/woocommerce_service.dart';
+import 'ProductDetailScreen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -15,14 +16,17 @@ class _ProductScreenState extends State<ProductScreen> {
   List<dynamic> _products = [];
   bool _loading = true;
 
+  Timer? _timer; // keep a reference to the timer
+
   @override
   void initState() {
     super.initState();
+
     // Run immediately once
     _loadProducts();
 
-    // Run every 5 seconds
-    Timer.periodic(Duration(seconds: 2), (timer) {
+    // Run every 3 seconds
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       _loadProducts();
     });
   }
@@ -46,6 +50,11 @@ class _ProductScreenState extends State<ProductScreen> {
     return url.replaceFirst("https://localhost", "http://192.168.1.98");
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel(); // stop timer to prevent memory leak
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +74,15 @@ class _ProductScreenState extends State<ProductScreen> {
                 : const Icon(Icons.shopping_bag),
             title: Text(product["name"] ?? "No name"),
             subtitle: Text("₹${product["price"] ?? "0"}"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(productId: product["id"]),
+                ),
+              );
+
+            },
           );
         },
       ),

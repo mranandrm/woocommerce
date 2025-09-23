@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:woocommerce/screens/HomeScreen.dart';
-import 'package:woocommerce/screens/LoginScreen.dart';
+import 'package:woocommerce/screens/auth/LoginScreen.dart';
 import 'package:woocommerce/screens/ProductScreen.dart';
-import 'package:woocommerce/screens/RegisterScreen.dart';
+import 'package:woocommerce/screens/auth/RegisterScreen.dart';
 
 void main() {
   runApp(const MyApp());

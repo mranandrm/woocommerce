@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:woocommerce/screens/HomePage.dart';
 import 'package:woocommerce/services/woocommerce_service.dart';
 
-import 'ProductScreen.dart';
+import '../HomeScreen.dart';
+import '../ProductScreen.dart';
+import 'ProfileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +22,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool loading = false;
   String message = "";
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _username.text = "rmanandmr05@gmail.com";
+    _password.text = "password";
+  }
 
   Future <void> _login() async {
 
@@ -39,11 +52,38 @@ class _LoginScreenState extends State<LoginScreen> {
          setState(() => message ="Login Successfull");
 
          // ✅ Navigate directly to ProductScreen
+         // Navigator.pushReplacement(
+         //   context,
+         //   MaterialPageRoute(builder: (context) => const ProductScreen()),
+         // );
+
+         String email = response["user_email"];
+
+         // 🔹 Now fetch WooCommerce customer by email
+         final customer = await service.getCustomerByEmail(email);
+
+         print("Customer ID: ${customer["id"]}");
+         print("Customer Name: ${customer["first_name"]} ${customer["last_name"]}");
+         print("Avatar: ${customer["avatar_url"]}");
+
+         // Save token + customer ID
+         final prefs = await SharedPreferences.getInstance();
+         await prefs.setString("token", response["token"]);
+         await prefs.setInt("customer_id", customer["id"]);
+
+         // Navigate to profile screen & pass customer data
+         // Navigator.push(
+         //   context,
+         //   MaterialPageRoute(
+         //     builder: (context) => ProfileScreen(customer: customer),
+         //   ),
+         // );
+
+         // Navigate to Home with drawer
          Navigator.pushReplacement(
            context,
-           MaterialPageRoute(builder: (context) => const ProductScreen()),
+           MaterialPageRoute(builder: (context) => const HomePage()),
          );
-
        }
        else{
 

@@ -70,6 +70,25 @@ class WooCommerceService {
     }
   }
 
+  // Get customer details by email
+  Future<Map<String, dynamic>> getCustomerByEmail(String email) async {
+    try {
+      final response = await _dio.get(
+        "/customers",
+        queryParameters: {"email": email},
+      );
+
+      if (response.statusCode == 200 && response.data.isNotEmpty) {
+        return response.data[0]; // WooCommerce returns a list, pick first
+      } else {
+        throw Exception("Customer not found");
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to fetch customer: ${e.response?.data ?? e.message}");
+    }
+  }
+
+
 
   /// Fetch brands
   Future<List<dynamic>> getBrands() async {
@@ -105,6 +124,21 @@ class WooCommerceService {
   Future<List<dynamic>> getProducts() async {
     try {
       final response = await _dio.get("/products");
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception("Failed to load products: ${response.data}");
+      }
+    } on DioError catch (e) {
+      throw Exception("Dio error: ${e.response?.data ?? e.message}");
+    }
+  }
+
+  /// Fetch Single products
+  Future<Map<String, dynamic>> getProductById(String id) async {
+    try {
+      final response = await _dio.get("/products/" + id);
 
       if (response.statusCode == 200) {
         return response.data;
