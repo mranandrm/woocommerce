@@ -25,6 +25,52 @@ class WooCommerceService {
     );
   }
 
+  // Register new customer
+  Future<Map<String, dynamic>> registerUser(Map<String, dynamic> userData) async {
+    try {
+      final response = await _dio.post(
+        "/customers", // ✅ since baseUrl already has /wc/v3
+        data: jsonEncode(userData),
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      return {
+        "error": true,
+        "message": e.response?.data ?? e.message,
+      };
+    }
+  }
+
+  // Login user (JWT)
+  Future<Map<String, dynamic>> loginUser(String username, String password) async {
+    try {
+      final response = await _dio.post(
+        "http://192.168.1.98/wordpress-6.8.2/wordpress/wp-json/jwt-auth/v1/token",
+        data: jsonEncode({
+          "username": username,
+          "password": password,
+        }),
+        options: Options(
+          headers: {"Content-Type": "application/json"},
+        ),
+      );
+
+      print(response.data);
+
+      return response.data;
+    } on DioException catch (e) {
+
+      print(e.response?.data ?? e.message);
+
+      return {
+        "error": true,
+        "message": e.response?.data ?? e.message,
+      };
+    }
+  }
+
+
   /// Fetch brands
   Future<List<dynamic>> getBrands() async {
     try {
