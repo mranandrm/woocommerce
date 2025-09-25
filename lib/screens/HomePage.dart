@@ -21,12 +21,22 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const CategoryScreen(title: 'Category',),
-    const BrandScreen(title: 'Brand',),
-    const ProductScreen(),
-    const ProfileScreen(customer: {},),
+  // Page titles for AppBar
+  final List<String> _titles = [
+    "Home",
+    "Category",
+    "Brand",
+    "Products",
+    "My Profile",
+  ];
+
+  // Pages without AppBars
+  final List<Widget> _pages = const [
+    HomeScreen(),
+    CategoryScreen(title: 'Category'),
+    BrandScreen(title: 'Brand'),
+    ProductScreen(),
+    ProfileScreen(title: 'My Profile'),
   ];
 
   void _onDrawerItemSelected(int index) async {
@@ -47,10 +57,13 @@ class _HomePageState extends State<HomePage> {
     setState(() => _selectedIndex = index);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("WooCommerce App")),
+      appBar: AppBar(
+        title: Text(_titles[_selectedIndex]),
+      ),
       drawer: CustomDrawer(onItemSelected: _onDrawerItemSelected),
       body: _pages[_selectedIndex],
     );

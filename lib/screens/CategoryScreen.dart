@@ -59,14 +59,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // stop timer to prevent memory leak
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      // appBar: AppBar(title: Text(widget.title)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(

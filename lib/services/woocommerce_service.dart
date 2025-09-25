@@ -88,6 +88,27 @@ class WooCommerceService {
     }
   }
 
+  Future <Map<String,dynamic>> getCustomerById(int id) async {
+
+      try{
+
+        final response = await _dio.get("/customers/$id");
+
+        if(response.statusCode == 200){
+
+          return response.data;
+        }
+        else{
+
+          throw Exception("Failed to load Customer");
+        }
+      }on DioException catch (e){
+
+        throw Exception("Dio Error: ${e.response?.data ??e.message}");
+      }
+
+  }
+
 
 
   /// Fetch brands
