@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woocommerce/services/woocommerce_service.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Map<String, dynamic>? product;
   bool loading = true;
   String? error;
+  int quantity = 1;
 
   @override
   void initState() {
@@ -26,7 +28,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     try {
       final response = await _service.getProductById(widget.productId.toString());
       setState(() {
-        product = response; // response is a map for a single product
+        product = response;
         loading = false;
       });
     } catch (e) {
@@ -39,6 +41,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   String fixImageUrl(String url) {
     return url.replaceFirst("https://localhost", "http://192.168.1.98");
+  }
+
+  double calculateTotalPrice() {
+    double price = double.tryParse(product?["price"] ?? "0") ?? 0;
+    return price * quantity;
   }
 
   @override
@@ -56,8 +63,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (product?["images"] != null &&
-                product!["images"].isNotEmpty)
+            if (product?["images"] != null && product!["images"].isNotEmpty)
               Image.network(
                 fixImageUrl(product!["images"][0]["src"]),
                 height: 250,
@@ -86,13 +92,85 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               product?["description"] ?? "",
               style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 24),
+
+            // 🔹 Quantity Selector
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    if (quantity > 1) {
+                      setState(() {
+                        quantity--;
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.remove_circle, color: Colors.red, size: 32),
+                ),
+                Text(
+                  quantity.toString(),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      quantity++;
+                    });
+                  },
+                  icon: const Icon(Icons.add_circle, color: Colors.green, size: 32),
+                ),
+              ],
+            ),
+
+            // 🔹 Total Price Preview
+            const SizedBox(height: 12),
+            Center(
+              child: Text(
+                "Total: ₹${calculateTotalPrice().toStringAsFixed(2)}",
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+
             const SizedBox(height: 20),
+
+            // 🔹 Add to Cart Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Add to cart action
+                onPressed: () async {
+                  try {
+                    final prefs = await SharedPreferences.getInstance();
+                    final token = prefs.getString("token");
+
+                    if (token == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please login first")),
+                      );
+                      return;
+                    }
+
+                    final cartResponse = await _service.addToCart(
+                      widget.productId,
+                      quantity: quantity,
+                      token: token,
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("✅ Added to cart successfully")),
+                    );
+
+                    print("Cart response: $cartResponse");
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Error: $e")),
+                    );
+                  }
                 },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
                 child: const Text("Add to Cart"),
               ),
             ),

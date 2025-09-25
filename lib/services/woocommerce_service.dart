@@ -171,6 +171,47 @@ class WooCommerceService {
     }
   }
 
+  // Future<Map<String, dynamic>> addToCart(int productId, {int quantity = 1, String? token}) async {
+  //   try {
+  //     final response = await _dio.post(
+  //       "/wc/store/v1/cart/add-item",
+  //       data: {
+  //         "id": productId,
+  //         "quantity": quantity,
+  //       },
+  //       options: Options(
+  //         headers: {
+  //           if (token != null) "Authorization": "Bearer $token",
+  //         },
+  //       ),
+  //     );
+  //
+  //     return response.data;
+  //   } on DioException catch (e) {
+  //     throw Exception("Add to cart failed: ${e.response?.data ?? e.message}");
+  //   }
+  // }
+
+  Future<Map<String, dynamic>> addToCart(int productId,
+      {int quantity = 1, required String token}) async {
+    try {
+      final response = await _dio.post(
+        "/wc/v3/cart/add",
+        data: {
+          "product_id": productId,
+          "quantity": quantity,
+        },
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception("Add to cart failed: ${e.response?.data ?? e.message}");
+    }
+  }
+
+
   /// Fetch orders
   Future<List<dynamic>> getOrders() async {
     try {

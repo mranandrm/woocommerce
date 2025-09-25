@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woocommerce/screens/HomeScreen.dart';
+import 'package:woocommerce/screens/SettingScreen.dart';
 import 'package:woocommerce/widgets/CustomDrawer.dart';
 
 import 'BrandScreen.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     "Brand",
     "Products",
     "My Profile",
+    "Setting"
   ];
 
   // Pages without AppBars
@@ -37,10 +39,11 @@ class _HomePageState extends State<HomePage> {
     BrandScreen(title: 'Brand'),
     ProductScreen(),
     ProfileScreen(title: 'My Profile'),
+    SettingScreen(title: 'Setting')
   ];
 
   void _onDrawerItemSelected(int index) async {
-    if (index == 5) {
+    if (index == 6) {
       // Logout selected
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();

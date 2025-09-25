@@ -59,12 +59,20 @@ Widget build(BuildContext context) {
             Navigator.pop(context);
           },
         ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text("Setting"),
+          onTap: () {
+            onItemSelected(5);
+            Navigator.pop(context);
+          },
+        ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.logout),
           title: const Text("Logout"),
           onTap: () {
-            onItemSelected(5);
+            onItemSelected(6);
             Navigator.pop(context);
           },
         ),
