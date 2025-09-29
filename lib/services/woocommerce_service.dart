@@ -19,8 +19,8 @@ class WooCommerceService {
           "Authorization": basicAuth,
           "Content-Type": "application/json",
         },
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
       ),
     );
   }
@@ -29,7 +29,7 @@ class WooCommerceService {
   Future<Map<String, dynamic>> registerUser(Map<String, dynamic> userData) async {
     try {
       final response = await _dio.post(
-        "/customers", // ✅ since baseUrl already has /wc/v3
+        "/customers",
         data: jsonEncode(userData),
       );
 
@@ -53,6 +53,8 @@ class WooCommerceService {
         }),
         options: Options(
           headers: {"Content-Type": "application/json"},
+          sendTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
         ),
       );
 
@@ -108,8 +110,6 @@ class WooCommerceService {
       }
 
   }
-
-
 
   /// Fetch brands
   Future<List<dynamic>> getBrands() async {

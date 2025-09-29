@@ -51,11 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
          setState(() => message ="Login Successfull");
 
-         // ✅ Navigate directly to ProductScreen
-         // Navigator.pushReplacement(
-         //   context,
-         //   MaterialPageRoute(builder: (context) => const ProductScreen()),
-         // );
+
 
          String email = response["user_email"];
 
@@ -71,13 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
          await prefs.setString("token", response["token"]);
          await prefs.setInt("customer_id", customer["id"]);
 
-         // Navigate to profile screen & pass customer data
-         // Navigator.push(
-         //   context,
-         //   MaterialPageRoute(
-         //     builder: (context) => ProfileScreen(customer: customer),
-         //   ),
-         // );
 
          // Navigate to Home with drawer
          Navigator.pushReplacement(
